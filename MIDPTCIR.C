@@ -1,55 +1,45 @@
-//MID PT CIRCLE
-#include <graphics.h>
 #include <stdio.h>
+#include <graphics.h>
+#include <conio.h>
 
-void drawCircle(int xc, int yc, int x, int y) {
-    // Using four-way symmetry, draw points in the four quadrants
-    putpixel(xc + x, yc + y, 3); // Quadrant 1
-    putpixel(xc - x, yc + y, 3); // Quadrant 2
-    putpixel(xc + x, yc - y, 3); // Quadrant 3
-    putpixel(xc - x, yc - y, 3); // Quadrant 4
-}
+void main() {
+    int gd = DETECT, gm;
 
-void midpointCircle(int xc, int yc, int radius) {
-    int x = 0, y = radius;
-    int p = 1 - radius; // Initial decision parameter
+    int i, n, x, y, xc, yc;
+    float d;
 
-    // Initial points in four quadrants
-    drawCircle(xc, yc, x, y);
+    initgraph(&gd, &gm, "C:\\TURBOC3\\BGI");
 
-    // Continue until x crosses y
-    while (x < y) {
-        x++;
+    printf("Enter the radius: ");
+    scanf("%d", &n);
 
-        if (p < 0) {
-            p += 2 * x + 1;
+    printf("Enter x and y coordinates of circle centre: ");
+    scanf("%d %d", &xc, &yc);
+
+    x = 0;
+    y = n;
+    d = 1.25 - n;
+
+    do {
+        if (d < 0) {
+            x = x + 1;
+            d = d + 2 * x + 1;
         } else {
-            y--;
-            p += 2 * (x - y) + 1;
+            x = x + 1;
+            y = y - 1;
+            d = d + 2 * x - 2 * y + 1;
         }
 
-        // Draw the points for the new (x, y) using four-way symmetry
-        drawCircle(xc, yc, x, y);
-    }
-}
+        putpixel(xc + x, yc + y, 5);
+        putpixel(xc - x, yc + y, 5);
+        putpixel(xc + x, yc - y, 5);
+        putpixel(xc - x, yc - y, 5);
+        putpixel(xc + y, yc + x, 5);
+        putpixel(xc - y, yc + x, 5);
+        putpixel(xc + y, yc - x, 5);
+	    putpixel(xc - y, yc - x, 5);
+    } while (x < y);
 
-int main() {
-    int gd = DETECT, gm;
-    int xc, yc, radius;
-
-    // Initialize graphics mode
-    initgraph(&gd, &gm, "");
-
-    printf("Enter center of the circle (xc, yc): ");
-    scanf("%d %d", &xc, &yc);
-    printf("Enter radius of the circle: ");
-    scanf("%d", &radius);
-
-    // Draw the circle
-    midpointCircle(xc, yc, radius);
-
-    // Keep the output window open
     getch();
     closegraph();
-    return 0;
 }
